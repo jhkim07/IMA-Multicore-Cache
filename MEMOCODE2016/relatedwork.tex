@@ -1,0 +1,24 @@
+\label{sec:relatedwork}
+
+\cite{10.1109/MS.2005.102} performance analysis techniques 
+
+\cite{Rakhee2014} performance measurement of multicore systems
+
+\cite{DBLP:journals/corr/TeodoroKAKFS15} performance analysis of multicore systems
+
+\cite{5762713} evaluation and optimization of the performance
+
+\cite{Subramanian13} Providing performance predictability and improving memory interference 
+
+\cite{SHARMA2014544} The tool also provides the possibility of implementing different scheduling and mapping algorithms for multi-core process systems and evaluating the performance when changing various design parameters.
+
+
+%Analyzing the schedulability of an application while considering an abstraction of the execution platform leads necessarily to underestimate the system requirements (workload) in terms of resources. This may cause serious deficits when deploying the system on a concrete platform. 
+
+The analysis of multicore real-time systems has attracted a lot of attention recently. 
+
+In this work, we combine the analysis processes so that for a given platform we check whether the application tasks will be schedulable or not, given the task WCETs estimated in isolation. Our framework provides also the ability to calculate the isWCET and a method for reallocation of tasks to cores upon non-schedulability. 
+ %In case a system is not schedulable, given the actual interference we analyze the cores utilization and recommend a change in tasks allocation among cores so that a new configuration could be schedulabe. 
+The novelty of our modeling approach is the inclusion of cache coloring policy \cite{Hyoseung13} to arbitrate concurrent access requests to the shared cache, FR-FCFS policy \cite{Rixner2000,Nesbit2006,Kim14} commonly used by modern memory controllers to schedule the DRAM accesses, while distinguishing between read and write requests. 
+
+%Given a multicore execution platform, including processing units, local caches and a shared memory, we formally analyze the system schedulability. Moreover, our framework can easily be used to estimate the concrete execution time, including cache access and blobking/access time to the shared memory, of the application tasks.    

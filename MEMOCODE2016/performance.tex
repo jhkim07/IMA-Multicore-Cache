@@ -1,0 +1,40 @@
+This section defines the performance metrics we have chosen as a basis to compare memory-centric and processor-centric scheduling policies. We analyze the performance on a set of independent runs $\emph{Runs}=\{\pi_1, \pi_2, \ldots\}$, randomly generated from a standard cylinder construction according to a probabilistic semantics \cite{DBLP:conf/formats/DavidLLMPVW11}. A run $\pi$ of a system $S$ is an infinite sequence:
+\[ \pi = s_0 (t_0,e_0) s_1 (t_1,e_1) \ldots s_n (t_n,e_n) \ldots \]
+\noindent
+where each states $s_i$ gives information about a system configuration including the state of each  task (e.g.  idle,  ready,  running,   blocked)  and  resource (e.g. idle,  occupied) at stage  $i$; $s_0$ is the initial state. Each $e_i$ indicates an event (triggering,  queued or completing) signifying a transition from state $s_i$ to $s_{i+1}$. Timestamp $t_0$ indicates the time from system initiation until event $e_0$. Every subsequent timestamp $t_i$ (with $i \geq 1$) indicates the separation between events $e_{i-1}$ and $e_i$.
+
+Moreover, for a given run $\pi$ we introduce the following the obvious predicates: 
+\begin{itemize}
+\item $\emph{InUse}_{\pi}^s(C)\in\mathbb{N}$ states whether the core $C$ is in use in state $s$ of $\pi$ or not. In fact, a core is in use if it is either effectively executing a workload or stalling due read access requests to L2 and DRAM.   
+\item $\emph{Issued}_{\pi}^C(\emph{req})$ indicates at which state of $\pi$ the access request \emph{req} performed by core $C$ has been issued.
+\item $\emph{Granted}_{\pi}^C(\emph{req})$ states the earliest state at which the request \emph{req} performed by core $C$ has been granted.
+\end{itemize}
+ 
+\begin{definition}[Core utilization]
+The utilization $\emph{U}_{\pi}^{{\cal L}}(C)$ of a core $C$ for a given run ${\pi}$ up to the time bound (simulation length) {\cal L} is given by the following:\\ 
+%\vspace{-2mm}
+\begin{footnotesize}
+\[
+\emph{U}_{\pi}^{{\cal L}}(C) = (\limsup_{t\rightarrow {\cal L}} \frac{\sum\limits_{t_{i+1}\le {\cal L}}((t_{i+1}-t_i)\times \emph{InUse}_{\pi}^{s_{i+1}}(C))
+}{{\cal L}}) \times 100
+\]
+\end{footnotesize}
+%\vspace{-3mm}
+\end{definition}
+
+The average utilization of a core $C$ over the set of runs $\emph{Runs}$, analyzed for the same time interval length {\cal L},  will be the sum of the individual runs utilization on the number of runs:
+\[ \emph{U}_{\emph{Runs}}^{{\cal L}}(C)=\frac{\sum\limits_{j=1}^{j= \mid\emph{Runs}\mid} \emph{U}_{\pi_j}^{{\cal L}}(C)}{\mid\emph{Runs}\mid}
+\]
+
+\begin{definition}[Interference of access requests]
+We define the interference delay of a request \emph{req} performed by a core $C$ in a run $\pi$ as follows: $\emph{ReqDelay}_{\pi}^C(req)=\emph{Granted}_{\pi}^C(\emph{req})-\emph{Issued}_{\pi}^C(\emph{req})$. 
+
+In similar way, we define the maximum delay of the requests $\emph{Req}_C$ performed by a core $C$ over a run $\pi$ by: 
+\[\emph{ReqDelay}_{\pi}^C= \max(\emph{ReqDelay}_{\pi}^C(req\mid req\in Req_C))\]
+\end{definition}
+
+The average of maximum interference delays performed by a core $C$ over the set of runs \emph{Runs} can be calculated as follows: 
+\[ \emph{ReqDelay}_{\emph{Runs}}^C=\frac{\sum\limits_{j=1}^{j= \mid\emph{Runs}\mid} \emph{ReqDelay}_{\pi_j}^C}
+{\mid\emph{Runs}\mid}\]
+
+As access requests to L2 and to DRAM do not have the same impact on the interference, later on we distinguish between $\emph{L2\_ReqDelay}_{\emph{Runs}}^C$ and $\emph{DRAM\_ReqDelay}_{\emph{Runs}}^C$ as the interference delays of a given core $C$ to access L2 and DRAM respectively. 

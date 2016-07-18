@@ -1,0 +1,9 @@
+
+%In multicore settings, where different applications running concurrently on different cores compete for the combination of local cache misses and interference delay for accessing a shared  memory can be large and highly variable depending on the platform architecture and the number of parallel access requests. 
+
+With the goal to reduce memory interference in multicore systems, a recent alternative to schedule memory-intensive application tasks is the use of a memory-centric policy \cite{Yao2015,Yao2012}. Tasks assigned to the same core are sorted in the ready queue according to a decreasing order of their WCRA (numbers of memory accesses). 
+
+We distinguish between the access numbers to L2 and DRAM, when comparing 2 tasks we prioritize first the task having more DRAM access requests as DRAM access is more expensive than accessing shared cache L2. If both tasks have the same DRAM access number of requests we refer then to their L2 access number where task having higher number is scheduled first.
+
+
+ 

@@ -1,0 +1,102 @@
+\documentclass{IEEEtran}
+\usepackage{amssymb}
+%\usepackage[francais]{babel}
+%\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amscd}
+\usepackage{hyperref}
+\usepackage{verbatim}
+\usepackage{subfigure}
+\usepackage{tikz}
+\usepackage{proof}
+\usepackage{alltt}
+\usepackage{color}
+\usepackage{xspace}
+\usepackage{tikz,ifthen}
+\usepackage{fancybox}
+\usepackage{wrapfig}
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{rotating}
+\usepackage{xcolor,colortbl}
+\usepackage{epstopdf}
+\usepackage[textsize=small,colorinlistoftodos]{todonotes}
+\pagestyle{plain}
+%
+\usepackage{makeidx}  % allows for indexgeneration
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+
+
+\newcommand{\ft}[1]{{\small\textsf{#1}}}
+\newcommand{\uppaal}{\textsc{Uppaal}\xspace}
+\newcommand{\uppaalsmc}{\textsc{Uppaal SMC}\xspace}
+\newcommand{\R}{\mathbb{R}_{\ge 0}}
+
+\newcommand{\CR}{\emph{WCRA}_c^r}
+\newcommand{\CW}{\emph{WCRA}_c^w}
+\newcommand{\MR}{\emph{WCRA}_m^r}
+\newcommand{\MW}{\emph{WCRA}_m^w}
+
+\newtheorem{definition}{Definition}
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{property}{Property}
+
+
+
+\IEEEoverridecommandlockouts
+
+
+\title{Performance Driven Scheduling of Multicore Time-critical Systems \thanks{This work has been supported by the NFFP6 Project.}}
+
+
+\author{
+\IEEEauthorblockN{Jalil Boudjadar, Jin Hyun Kim, Simin Nadjm-Tehrani} \\
+\IEEEauthorblockA{Department of Computer and Information Science \\ Link\"oping University, Sweden} 
+}
+
+
+\begin{document}
+\maketitle
+
+
+\begin{abstract}
+Multicore platforms are getting widely used in the deployment of embedded systems due to their computing capacity. Memory interference represents a challenge in leveraging the performance of multicore platforms and may lead to drastic degradations of the platform performance, in particular for memory-intensive systems. This paper explores performance-driven schedulability of  multicore systems by evaluating the performance when changing some design parameters (scheduling policies). The model-based framework we build enables to analyze the performance of multicore time-critical systems running core-centric and memory-centric scheduling policies. The system architecture we consider consists of a set of cores having each a local cache and sharing the cache level L2 and DRAM. The metrics we use to compare the performance achieved by different configurations of a system are: 1) cores utilization; and 2) the maximum delay per access request to shared cache and DRAM. Our framework, realized using Uppaal, can be viewed as an engineering tool, to be used during design stages, to identify the scheduling policies achieving  better performance for a given system while maintaining the system schedulability. As a proof of concept, we analyze 2 different cases studies and compare the outcomes.
+\end{abstract}
+
+
+
+\section{Introduction}
+\input{introduction}
+
+\section{Related Work}
+\input{relatedwork}
+
+
+\section{Background}
+\input{background}
+
+\section{Performance Metrics}
+\input{performance}
+
+\section{System Model Description}
+\input{modeling}
+
+
+\section{Performance Analysis}
+\input{analysis}
+
+\section{Case Study}
+\input{casestudy}
+
+
+\section{conclusion}
+\input{conclusion}
+
+
+\bibliographystyle{abbrv}
+\bibliography{references}
+
+%\listoftodos
+
+\end{document}

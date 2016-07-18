@@ -1,0 +1,241 @@
+\begin{thebibliography}{10}
+
+\bibitem{Jedec}
+{JEDEC: DDR3 SDRAM Standard JESD79-3F}.
+\newblock 2012.
+
+\bibitem{PAG}
+M.~Alt and F.~Martin.
+\newblock Generation of efficient interprocedural analyzers with pag.
+\newblock In A.~Mycroft, editor, {\em Static Analysis}, volume 983 of {\em
+  {LNCS}}, pages 33--50. Springer Berlin Heidelberg, 1995.
+
+\bibitem{Andersson2010}
+B.~Andersson, A.~Easwaran, and J.~Lee.
+\newblock Finding an upper bound on the increase in execution time due to
+  contention on the memory bus in cots-based multicore systems.
+\newblock {\em SIGBED Rev.}, 7(1):4:1--4:4, Jan. 2010.
+
+\bibitem{Bienia2008}
+C.~Bienia, S.~Kumar, J.~P. Singh, and K.~Li.
+\newblock The parsec benchmark suite: Characterization and architectural
+  implications.
+\newblock In {\em Proceedings of {PACT '08}}, pages 72--81. ACM, 2008.
+
+\bibitem{Facs2013}
+A.~Boudjadar, A.~David, J.~H. Kim, K.~G. Larsen, M.~Mikucionis, U.~Nyman, and
+  A.~Skou.
+\newblock A reconfigurable framework for compositional schedulability and power
+  analysis of hierarchical scheduling systems with frequency scaling.
+\newblock {\em Sci. Comput. Program.}, 113:236--260, 2015.
+
+\bibitem{Boudjadar15}
+A.~Boudjadar, J.~Dingel, B.~Madzar, and J.~H. Kim.
+\newblock Compositional predictability analysis of mixed critical real time
+  systems.
+\newblock In C.~Artho and C.~P. {\"O}lveczky, editors, {\em FTSCS'15}, pages
+  69--84, Cham, 2015. Springer International Publishing.
+
+\bibitem{DBLP:conf/concur/CassezL00}
+F.~Cassez and K.~G. Larsen.
+\newblock The impressive power of stopwatches.
+\newblock In C.~Palamidessi, editor, {\em CONCUR}, volume 1877 of {\em Lecture
+  Notes in Computer Science}, pages 138--152. Springer, 2000.
+
+\bibitem{Chatto2012}
+S.~Chattopadhyay, C.~Kee, A.~Roychoudhury, T.~Kelter, P.~Marwedel, and H.~Falk.
+\newblock A unified wcet analysis framework for multi-core platforms.
+\newblock In {\em {RTAS'12}}, pages 99--108, 2012.
+
+\bibitem{Rakhee2014}
+R.~Chhibber and R.~Garg.
+\newblock Multicore processor, parallelism and their performance analysis.
+\newblock {\em IJARCST}, 2:31--37, 2014.
+
+\bibitem{SMC}
+A.~David, K.~G. Larsen, A.~Legay, M.~Miku{\v{c}}ionis, and D.~B. Poulsen.
+\newblock Uppaal smc tutorial.
+\newblock {\em International Journal on Software Tools for Technology
+  Transfer}, 17(4):397--415, 2015.
+
+\bibitem{DBLP:conf/formats/DavidLLMPVW11}
+A.~David, K.~G. Larsen, A.~Legay, M.~Mikucionis, D.~B. Poulsen, J.~van Vliet,
+  and Z.~Wang.
+\newblock Statistical model checking for networks of priced timed automata.
+\newblock In U.~Fahrenberg and S.~Tripakis, editors, {\em FORMATS}, volume 6919
+  of {\em LNCS}, pages 80--96. Springer, 2011.
+
+\bibitem{5762713}
+J.~Diamond, M.~Burtscher, J.~D. McCalpin, B.~D. Kim, S.~W. Keckler, and J.~C.
+  Browne.
+\newblock Evaluation and optimization of multicore performance bottlenecks in
+  supercomputing applications.
+\newblock In {\em Performance Analysis of Systems and Software (ISPASS), 2011
+  IEEE International Symposium on}, pages 32--43, 2011.
+
+\bibitem{Ferdinand1999}
+C.~Ferdinand and R.~Wilhelm.
+\newblock Efficient and precise cache behavior prediction for real-time
+  systems.
+\newblock {\em Real-Time Syst}, 17(2-3):131--181, 1999.
+
+\bibitem{Huyck12}
+P.~Huyck.
+\newblock Arinc 653 and multi-core microprocessors x2014; considerations and
+  potential impacts.
+\newblock In {\em 2012 IEEE/AIAA 31st Digital Avionics Systems Conference
+  (DASC)}, pages 6B4--1--6B4--7, 2012.
+
+\bibitem{Kim14}
+H.~Kim, D.~de~Niz, B.~Andersson, M.~H. Klein, O.~Mutlu, and R.~Rajkumar.
+\newblock Bounding memory interference delay in cots-based multi-core systems.
+\newblock In {\em {RTAS'14}}, pages 145--154, 2014.
+
+\bibitem{Hyoseung13}
+H.~Kim, A.~Kandhalu, and R.~Rajkumar.
+\newblock A coordinated approach for practical os-level cache management in
+  multi-core real-time systems.
+\newblock In {\em {ECRTS´13}}, pages 80--89, 2013.
+
+\bibitem{HyoseungData14}
+H.~Kim, A.~Kandhalu, and R.~Rajkumar.
+\newblock Coordinated cache management for predictable multi-core real-time
+  systems.
+\newblock Technical report, Carnegie Mellon University, 2014.
+
+\bibitem{Lisper14}
+B.~Lisper.
+\newblock {SWEET} - {A} tool for {WCET} flow analysis (extended abstract).
+\newblock In {\em Leveraging Applications of Formal Methods, Verification and
+  Validation. 6th International Symposium, ISoLA'14}, volume 8803 of {\em
+  Lecture Notes in Computer Science}, pages 482--485. Springer, 2014.
+
+\bibitem{Locke91}
+C.~D. Locke, D.~R. Vogel, and T.~J. Mesler.
+\newblock Building a predictable avionics platform in ada: a case study.
+\newblock In {\em Real-Time Systems Symposium, 1991. Proceedings., Twelfth},
+  pages 181--189, Dec 1991.
+
+\bibitem{Wang2010}
+M.~Lv, W.~Yi, N.~Guan, and G.~Yu.
+\newblock Combining abstract interpretation with model checking for timing
+  analysis of multicore software.
+\newblock In {\em Proceedings of {RTSS'10}}, pages 339--349, 2010.
+
+\bibitem{Nesbit2006}
+K.~J. Nesbit, N.~Aggarwal, J.~Laudon, and J.~E. Smith.
+\newblock Fair queuing memory systems.
+\newblock In {\em Proceedings of {MICRO'06}}, pages 208--222. IEEE Computer
+  Society, 2006.
+
+\bibitem{Nowotsch14}
+J.~Nowotsch, M.~Paulitsch, D.~Buhler, H.~Theiling, S.~Wegener, and M.~Schmidt.
+\newblock Multi-core interference-sensitive {WCET} analysis leveraging runtime
+  resource capacity enforcement.
+\newblock In {\em Proceedings of {ECRTS'14}}, pages 109--118, 2014.
+
+\bibitem{5753612}
+M.~Paolieri, E.~Quinones, F.~J. Cazorla, J.~Wolf, T.~Ungerer, S.~Uhrig, and
+  Z.~Petrov.
+\newblock A software-pipelined approach to multicore execution of timing
+  predictable multi-threaded hard real-time tasks.
+\newblock In {\em ISORC'11}, pages 233--240, 2011.
+
+\bibitem{10.1109/MS.2005.102}
+E.~Putrycz, M.~Woodside, and X.~Wu.
+\newblock Performance techniques for cots systems.
+\newblock {\em IEEE Software}, 22(4):36--44, 2005.
+
+\bibitem{Benchmarking}
+E.~Putrycz, M.~Woodside, and X.~Wu.
+\newblock Performance techniques for cots systems.
+\newblock {\em IEEE Software}, 22(4):36--44, 2005.
+
+\bibitem{6280389}
+F.~F. Rivera, R.~Iglesias, J.~A. Lorenzo, J.~C. Pichel, T.~F. Pena, and J.~C.
+  Cabaleiro.
+\newblock A graphical tool for performance analysis of multicore systems based
+  on the roofline model.
+\newblock In {\em 2012 IEEE 10th International Symposium on Parallel and
+  Distributed Processing with Applications}, pages 847--848, 2012.
+
+\bibitem{Rixner2000}
+S.~Rixner, W.~J. Dally, U.~J. Kapasi, P.~Mattson, and J.~D. Owens.
+\newblock Memory access scheduling.
+\newblock In {\em Proceedings of the 27th Annual International Symposium on
+  Computer Architecture}, ISCA '00, pages 128--138, New York, NY, USA, 2000.
+  ACM.
+
+\bibitem{ima}
+{RTCA}.
+\newblock {DO-297/ED-124 - Integrated Modular Avionics (IMA) Development
+  Guidance and Certification Considerations}, 2005.
+
+\bibitem{Sarkar:2011:PTM:1967677.1967696}
+A.~Sarkar, F.~Mueller, and H.~Ramaprasad.
+\newblock Predictable task migration for locked caches in multi-core systems.
+\newblock In {\em Proceedings of the 2011 SIGPLAN/SIGBED Conference on
+  Languages, Compilers and Tools for Embedded Systems}, volume~46 of {\em LCTES
+  '11}, pages 131--140. ACM, 2011.
+
+\bibitem{SHARMA2014544}
+E.~M. Shakshuki, M.~Sharma, H.~Elmiligi, and F.~Gebali.
+\newblock {SMARTs}: A tool to simulate and analyze the performance of real-time
+  multi-core systems.
+\newblock {\em Procedia Computer Science}, 34:544 -- 551, 2014.
+
+\bibitem{Subramanian13}
+L.~Subramanian, V.~Seshadri, Y.~Kim, B.~Jaiyen, and O.~Mutlu.
+\newblock Mise: Providing performance predictability and improving fairness in
+  shared main memory systems.
+\newblock In {\em High Performance Computer Architecture (HPCA2013), 2013 IEEE
+  19th International Symposium on}, pages 639--650, 2013.
+
+\bibitem{Tan2009}
+L.~Tan.
+\newblock The worst-case execution time tool challenge 2006.
+\newblock {\em International Journal on Software Tools for Technology
+  Transfer}, 11(2):133--152, 2009.
+
+\bibitem{DBLP:journals/corr/TeodoroKAKFS15}
+G.~Teodoro, T.~M. Kur{\c{c}}, G.~Andrade, J.~Kong, R.~Ferreira, and J.~H.
+  Saltz.
+\newblock Performance analysis and efficient execution on systems with
+  multi-core cpus, gpus and mics.
+\newblock {\em CoRR}, abs/1505.03819, 2015.
+
+\bibitem{iDC}
+A.~Wilson and T.~Preyssler.
+\newblock Incremental certification and integrated modular avionics.
+\newblock In {\em {Digital Avionics Systems Conference, 2008. DASC 2008.
+  IEEE/AIAA 27th}}, pages 1.E.3--1--1.E.3--8, 2008.
+
+\bibitem{Yao2012}
+G.~Yao, R.~Pellizzoni, S.~Bak, E.~Betti, and M.~Caccamo.
+\newblock Memory-centric scheduling for multicore hard real-time systems.
+\newblock {\em Real-Time Systems}, 48(6):681--715, 2012.
+
+\bibitem{Yao2015}
+G.~Yao, R.~Pellizzoni, S.~Bak, H.~Yun, and M.~Caccamo.
+\newblock Global real-time memory-centric scheduling for multicore systems.
+\newblock {\em IEEE TRANSACTIONS ON COMPUTERS}, 2015.
+
+\bibitem{Ye2014}
+Y.~Ye, R.~West, Z.~Cheng, and Y.~Li.
+\newblock Coloris: A dynamic cache partitioning system using page coloring.
+\newblock In {\em Proceedings of {PACT '14}}, pages 381--392, 2014.
+
+\bibitem{Heechul2015}
+H.~Yun, R.~Pellizzoni, and P.~K. Valsan.
+\newblock Parallelism-aware memory interference delay analysis for {COTS}
+  multicore systems.
+\newblock In {\em ECRTS'15}, pages 184--195. {IEEE} Computer Society, 2015.
+
+\bibitem{Yun2012}
+H.~Yun, G.~Yao, R.~Pellizzoni, M.~Caccamo, and L.~Sha.
+\newblock Memory access control in multiprocessor for real-time systems with
+  mixed criticality.
+\newblock In {\em Proceedings of {ECRTS '12}}, pages 299--308. IEEE Computer
+  Society, 2012.
+
+\end{thebibliography}

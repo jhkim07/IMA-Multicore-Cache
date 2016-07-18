@@ -1,0 +1,125 @@
+\label{sec:casestudy}
+To illustrate the applicability of our performance-driven scheduling framework, we consider two case studies: a Mission Control Computer avionic system MCC \cite{Locke91} and an Autonomous Vehicle Component AVC \cite{HyoseungData14}. MCC is CPU-intensive whereas SVC is memory-intensive. We analyze and compare the performance achieved by each case study when running core-centric and memory centric. The diversity of the case studies gives a practical experience on what is the appropriate scheduling policy to be used for each application category to achieve high performance. 
+
+%***AS WCRAs are not provided in the original case studies, we calculate them by dividing the time spent by each task to fetch data over the average duration for one access. Moreover, as the numbers of access requests to shared cache and DRAM are not explicitly distinguishable in both case studies, we rely on the analysis results obtained by Ye \textit{et al.} \cite{Ye2014} using the cache coloring policy, where only 22.2\% of the access requests hit the L2 cache while 77.8\% of the requests need to access to DRAM. 
+
+The time durations for effective accesses to L2 ($L2AccessTime$) and DRAM ($DRAMAccessTime$) are $1/10^3$ and $1/10^2$ milliseconds respectively. Moreover, all time units are given in milliseconds. 
+
+\subsection{MCC Example}
+MCC is a partial specification for a hypothetical avionics mission control computer system dedicated to combat and attack
+aircrafts. The application we consider is a composition of 13 tasks having the characteristics shown in Table~\ref{tab:taskset1}, where \emph{WCRA}$_c$ and \emph{WCRA}$_m$ are given in terms of (reads; writes). Tasks are grouped in 4 components \{\emph{Display}=($T_1,T_2,T_3,T_4,T_5$), \emph{Radar}=($T_6,T_7$), \emph{{NAV}}=($T_8,T_9,T_{10}$), \emph{Weapon}=($T_{11},T_{12},T_{13}$)\} running each on one core \cite{Boudjadar15}. 
+
+****provide wcra for each task***
+\begin{table}
+\centering
+\caption{Attributes of the MCC tasks}
+\label{tab:taskset1}
+\vspace{1mm}
+\begin{tabular}{|l|l|l|l|l|l|l|}
+\hline
+Task & Prd & Offset & WCET & WCRA$_c$ & WCRA$_m$ & Dln  \\
+\hline  \hline
+$T_1$ & 200 & 0 & 3 & (X; X) & (Y; Y) & 200 \\
+\hline 
+$T_2$ & 200 & 0 & 1 & (X; X) & (Y; Y) & 200 \\
+\hline 
+$T_3$ & 80 & 0 & 2 &(X; X) & (Y; Y) & 80 \\
+\hline 
+$T_4$ & 80 & 0 & 9 &(X; X) & (Y; Y) & 80 \\
+\hline
+$T_5$ & 200 & 0 & 1 &(X; X) & (Y; Y) & 200 \\
+\hline
+$T_6$ & 50 & 0 & 5 & (X; X) & (Y; Y) & 50 \\
+\hline 
+$T_7$ & 25 & 0 & 2 & (X; X) & (Y; Y) & 25 \\
+\hline 
+$T_8$ & 59 & 0 & 8 &(X; X) & (Y; Y) & 59 \\
+\hline 
+$T_9$ & 200 & 0 & 3 &(X; X) & (Y; Y) & 200 \\
+\hline
+$T_{10}$ & 1000 & 0 & 1 &(X; X) & (Y; Y) & 1000 \\
+\hline
+$T_{11}$ & 200 & 0 & 1 &(X; X) & (Y; Y) & 200 \\
+\hline
+$T_{12}$ & 200 & 0 & 3 &(X; X) & (Y; Y) & 200 \\
+\hline
+$T_{13}$ & 50 & 0 & 3 & (X; X) & (Y; Y) & 50 \\
+\hline 
+$T_{14}$ & 200 & 0 & 3 & (X; X) & (Y; Y) & 200 \\
+\hline 
+$T_{15}$ & 50 & 0 & 3 &(X; X) & (Y; Y) & 50 \\
+\hline
+\end{tabular}
+\vspace{-2mm}
+\end{table}
+
+***Analysis results
+
+\subsection{AVC Example}
+AVC is a component of an autonomous vehicle system \cite{HyoseungData14}. The task functions are obtained from the PARSEC benchmark suite \cite{Bienia2008} and used to capture different components of complex real-time embedded applications such as sensor fusion and computer vision in an autonomous vehicle system.
+
+
+Essentially, the application consists of 4 periodic tasks $T_1$ (StreamCluster), $T_2$ (Ferret), $T_3$ (Canneal) and $T_4$ (FluidAnimation) running on 2 identical cores ($C_0$ and $C_1$) sharing L2 and DRAM. $T_1$ and $T_2$ are assigned to $C_0$, whereas $T_3$ and $T_4$ execute on $C_1$. The characteristics of the task set are shown in Table~\ref{tab:taskset}.     
+ \begin{table}
+\centering
+\caption{Attributes of the AVC tasks}
+\label{tab:taskset}
+\vspace{1mm}
+\begin{tabular}{|l|l|l|l|l|l|l|}
+\hline
+Task & Prd & Offset & WCET & WCRA$_c$ & WCRA$_m$ & Dln  \\
+\hline  \hline
+$T_1$ & 400 & 0 & 120 & (40; 0) & (110; 10) & 400 \\
+\hline 
+$T_2$ & 1200 & 0 & 130 & (60; 60) & (136; 273) & 1200 \\
+\hline 
+$T_3$ & 1800 & 0 & 500 &(134; 266) &(705; 705) & 1800 \\
+\hline 
+$T_4$ & 6000 & 0 & 440 &(314; 626) &(1828; 1462) & 6000 \\
+\hline
+\end{tabular}
+\vspace{-2mm}
+\end{table}
+
+***Analysis results
+
+%
+%The platform description is given in Table~\ref{tab:platform}, where $H$ is the access time for the core local cache. 
+Both cores run EDF schedulers (core-centric), while the access time to the local cache lasts for $1/10^3$ millisecond. 
+
+%\begin{table}
+%\centering
+%\caption{Platform description and mapping}
+%\label{tab:platform}
+%\vspace{3mm}
+%\begin{tabular}{|l|l|l|l|}
+%\hline
+%Core & Sched policy& H & Mapped tasks \\
+%\hline
+%$C_1$ & EDF & 1/$10^3$& $T_1, T_2$ \\
+%\hline
+%$C_2$ & EDF & 1/$10^3$& $T_3, T_4$ \\
+%\hline
+%\end{tabular}
+%\end{table}
+
+Each of the statistical analysis results of the case study has been calculated from 1000 simulations. Each simulation experiment runs for 1 million clock ticks. The accumulated utilization times of cores $C_0$ and $C_1$ are depicted in Fig.~\ref{fig:cores_utiliz}. During 1 million time units, cores accumulate 419983 and 360350 respectively. Thus, the average utilization of $C_0$ is $42\%$ and the average utilization of $C_1$ is $36\%$. Schedulability analysis shows that the system is schedulable. 
+
+Add analysis of average delay to access L2 and DRAM *****
+
+Second alternative: when using a memory-centric scheduling policy****
+
+%Since the system requirements are met and the core workloads are modest and relatively comparable, there is no need to migrate any task. The longest analysis time spent by Uppaal is 3426.7 seconds. The performance and analysis results from the case study are encouraging and suggest that the framework might scale to larger systems.
+
+%\begin{figure}[ht!]
+%\centering
+%\vspace{-3mm}
+%\caption{Accumulated cores utilization.}
+%\label{fig:cores_utiliz}
+%\includegraphics[width=80mm,height=48mm]{utiliz_Result_Simulation2++.png}
+%\end{figure}   
+
+**case study2***
+
+
+****Discussion of the performance results and how one would choose the appropriate scheduling policy.

@@ -1,0 +1,25 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Related Work}{}% 2
+\BOOKMARK [1][-]{section.3}{Background}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{Systems Benchmarking}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Core-centric Scheduling}{section.3}% 5
+\BOOKMARK [2][-]{subsection.3.3}{Memory-centric Scheduling}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.4}{Shared Memory Access Scheduling}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.5}{Statistical Model Checking}{section.3}% 8
+\BOOKMARK [1][-]{section.4}{Performance Metrics}{}% 9
+\BOOKMARK [1][-]{section.5}{System Model Description}{}% 10
+\BOOKMARK [2][-]{subsection.5.1}{Application Model}{section.5}% 11
+\BOOKMARK [2][-]{subsection.5.2}{Platform Model}{section.5}% 12
+\BOOKMARK [3][-]{subsubsection.5.2.1}{Modeling of Processing Elements}{subsection.5.2}% 13
+\BOOKMARK [3][-]{subsubsection.5.2.2}{Modeling of Shared Memories}{subsection.5.2}% 14
+\BOOKMARK [2][-]{subsection.5.3}{System Model}{section.5}% 15
+\BOOKMARK [1][-]{section.6}{Performance Analysis}{}% 16
+\BOOKMARK [2][-]{subsection.6.1}{Schedulability Analysis}{section.6}% 17
+\BOOKMARK [2][-]{subsection.6.2}{Memory Interference Analysis}{section.6}% 18
+\BOOKMARK [2][-]{subsection.6.3}{Utilization Analysis}{section.6}% 19
+\BOOKMARK [2][-]{subsection.6.4}{Performance Comparison}{section.6}% 20
+\BOOKMARK [1][-]{section.7}{Case Study}{}% 21
+\BOOKMARK [2][-]{subsection.7.1}{MCC Example}{section.7}% 22
+\BOOKMARK [2][-]{subsection.7.2}{AVC Example}{section.7}% 23
+\BOOKMARK [1][-]{section.8}{conclusion}{}% 24
+\BOOKMARK [1][-]{section*.1}{References}{}% 25

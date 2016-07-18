@@ -1,0 +1,28 @@
+\label{sec:background}
+%Before diving into the description of our contributions, we introduce the fundamental background of our work.
+
+In multicore settings, assessement of the execution time and memory interference has become a challenge because the number of possible interleavings increases exponentially with the number of processes, number of cores and number of shared resources \cite{Chatto2012}. In practice, concurrent programs may have astronomical numbers of legal interleavings which makes the interleaving analysis not feasible. An alternative is to reuse the knowledge acquired from the single core analysis and just focus on the interference resulting from the access to shared memories. This section introduces benchmarking, as a technique to measure WCET and WCRA, as well as the fundamental background of our work.
+
+\begin{figure}[ht!]
+\centering
+\caption{Simplified multicore system architecture.}
+\label{fig:architecture}
+\includegraphics[scale=0.45]{architecture.pdf}
+\end{figure}
+
+The overall system architecture we consider in this paper is depicted in Fig.~\ref{fig:architecture}, where $cc$ is the cache coloring policy and $s_i$ are CPU scheduling policies.
+
+\subsection{Systems Benchmarking} 
+\input{benchmarking}
+ 
+\subsection{Core-centric Scheduling}
+\input{core-centric}
+
+\subsection{Memory-centric Scheduling}
+\input{memory-centric}
+
+\subsection{Shared Memory Access Scheduling}
+\input{memoryscheduling}
+
+\subsection{Statistical Model Checking}
+\input{smc}

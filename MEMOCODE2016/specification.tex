@@ -1,0 +1,106 @@
+
+****
+Assumptions:
+\begin{itemize}
+\item We do not distinguish between cache for data and cache for instructions.
+\item We do not consider shared cache level, but it can be included in the same way as shared memory (DRAM).
+\item A task, representing a program, must contain at least one executable instruction.
+\item Tasks are assigned statically to PE, but our framework can easily be extended with dynamic assignment to incorporate migration and workload balance.
+\item Tasks are statically ordered for the execution on a core using a local scheduler. 
+\item *** tasks are non preemptible for CPU usage but they can delay because of memory access. 
+\item the TDMA slot interval must be wider than the time of one DRAM access, otherwise all DRAM accesses will be postponed infinitely.
+\end{itemize}
+
+******
+
+Basically, an embedded system is given by an application mapped to a platform. The platform consists of a set of execution elements (cores, caches), a shared DRAM and mechanisms to share and control the access to the platform resources like processor schedulers and DRAM connectors. An application is a parallel composition of a set of tasks.
+
+${\cal T}$ is the set of tasks and ${\cal C}$ is the set of cores.
+
+\subsection{Application Specification}
+
+
+An application $AP$ is a set of tasks each of which describes the execution of an individual process. Each task is a sequence of timed (atomic) actions representing the basic instructions (addition, multiplication, data output, etc) of the corresponding process.
+Each timed action is assigned an execution time, which is usually the duration to execute such an action on a single core platform , e.g. 3 ticks to execute the Assembly instruction \texttt{Add} on a machine 8086, without including the time needed to fetch data.  In practice, a timed action can either be a computation step (Compute), communication (Input, Output) or particular statements like END, EOF, EXIT, etc. 
+
+To perform the computation specified by a timed action, a data access can be requested. We consider the following patterns to specify the data access:
+
+\begin{itemize}
+\item \texttt{NONE}: neither cache nor DRAM access is required. This specific option fits for particular instructions like \textit{Exit}, \textit{Break}, etc.
+\item \texttt{CacheOnly}: a data access is needed and always leads a (successful) cache hit.
+\item \texttt{DRAMReq}: a data access is requested however the cache access always misses, thus execution needs to access the main memory DRAM.   
+\item \texttt{NonDterministic}: a data access is requested, however the cache hit/miss is non-deterministic. Thus, if a cache miss occurs it must be followed by a DRAM access request.
+\end{itemize}
+
+Such patterns can easily be identified using AI program/cache analysis \cite{Ferdinand1999}, e.g. tool PAG \cite{PAG}, and abstract interpretation \cite{Wang2010}.
+
+\begin{definition}[Timed action] \label{def:Act}
+ A timed action $A$ is one step computation given by $\langle ET, AP\rangle$ where:
+\begin{itemize}
+\item $ET$ is the computation time. As we will show in Section XX**, the execution time of a timed action includes the computation time and the time needed for fetching data, which depends strongly on the platform and the architecture of cache/DRAM. 
+\item $AP$ is the data access pattern of $A$. 
+\end{itemize} 
+\end{definition}
+By $\cal{A}$ we denote the set of all timed actions. We define a task behavior by a given sequence of timed actions.
+
+
+%We consider a multicore platform and associate each timed action to a set of processors on which it can execute. 
+%We associate to each timed action energy consumption rates specifying how much energy is consumed by this action per time unit during its execution on a given processor. To this end, we introduce the rate relation $\Gamma: \cal{A} \times \cal{P} \rightarrow \mathbb{R}^{+}$ which associates to the execution of each action an energy consumption rate. 
+ 
+\begin{definition}[Task behavior]
+The behavior $B$ of a task is a transition system $\langle L,l^0,L_f\rightarrow\rangle$ specifying the sequence of timed actions performed by that task where:
+\begin{itemize}
+\item $L$ is a set of locations and $l^0\in L$ is the initial location,
+\item $L_f\subseteq L$ is a set of final locations,
+\item $\rightarrow \subseteq L/L_f\times {\cal A}\times L$ is the transition relation leading from a non terminal location to another state through the execution of a timed action. 
+\end{itemize} 
+\end{definition}
+
+As in any other real-time setting, the behavior of process can be subject to a set of timed constraints. In the following we define the task structure as a sequence of timed actions constrained with a deadline and a period.
+
+\begin{definition}[Task structure] A task $T$ is given by $\langle Prd, Dln, Pri, B\rangle$ where $Prd$ is the task period, $Dln$ is the deadline, $Pri$ is the priority level associated to task $T$, $B$ is the task behavior defined above. 
+\end{definition}
+In order to make the application specification flexible and independent from the platform, we do not (statically) specify the identifier of the core to which the task is assigned but rather it will be given by a mapping during the system instantiation, i.e. once the target platform is given.  
+
+\subsection{Platform Specification}
+A platform is given by a set of processing elements PEs, a shared DRAM memory and a connector to share and manage the access to DRAM. The DRAM access policy we adopt in this paper is TDMA (Time Division Multiple Access).  
+Each processing element PE is given by a computation resource (core), a cache memory and a scheduler. The access time for local caches varies from a PE to another. Moreover, once an access to DRAM is granted the time for fetching data is also a platform 
+ parameter.
+
+Formally, a PE is given by $\langle C, sched, H\rangle$ where $C$ is a core processor and $sched$ is the scheduling policy (scheduler) adopted, $H$ is the local cache memory. Throughout this paper, we abstract the cache memory by a number stating the time duration for one access to the cache. In fact, such a number corresponds to a cache hit only. In case of a cache miss, extra delay resulted from accessing the DRAM must be considered. 
+
+A core processor $C$ is a transition system $\langle \{free, occupied\}, free, \emptyset, \rightarrow_C\rangle$ consisting of two locations \textit{free} and \textit{occupied}, initially at location \textit{free}, and a transition relation between both locations with empty (internal) actions.
+   
+Similar to cache, we abstract the DRAM in a number stating the duration to fetch data in DRAM once an access is granted by the DRAM connector. 
+
+A TDMA connector (bus) $B$ is given by a cyclic transition system $\langle \{b_1, .., b_n\},\\ b_1, \emptyset, \rightarrow_b\rangle$ where $n$ is the number of cores (in ${\cal C}$) and a transition exists between two locations if they are successors ($b_x, b_{x+1}$) except for $b_n$ which is linked to $b_1$. Moreover, a transition from a location to another can be performed only when the TDMA slot expires, i.e. a delay equal to the TDMA slot has spent at the source location of the transition. In our framework, the information needed from the TDMA bus is the current location (which core is actually allocated the DRAM access) and the remaining time to the expiry of the current slot. We capture both attributes using two functions:
+\[ turn: \R \rightarrow \{b_1, .., b_n\}\] 
+\[ quantum: \R \times \{b_1, .., b_n\} \rightarrow \R \]
+
+So that we characterize the TDMA bus $B=(turn, quantum)$.
+
+
+Finally, a platform $P$ is given by $\langle PE_1, .., PE_n, DRAM, B\rangle$. One can see that updating the specification of a platform ingredient does not affect the others. In case a new memory connector needs to be used instead (for example FCFS), we simply replace the bus $B$ with the new connector. 
+
+\subsection{System Specification}
+A system specification is given by an application $AP$, a pltaform $P$ and a mapping $M:{\cal T} \rightarrow {\cal C}$ assigning each task a core. A task can only be assigned to one core, however a core can serve different tasks.
+
+
+
+*******************Analysis*********************
+
+In order to perform formal analysis for the verification of some properties, one needs to describe the state space first.
+In the following we describe the semantics of system, and thereafter we illustrate the verification using model-checking exploration.
+\subsection{Timed Semantics}
+then the semantics: what is a system state ***,
+How the execution moves from a state to another
+\subsection{Formal Analysis}
+which kind of properties: 
+sched, 
+WCET
+average response time of each task
+Delay related to memory access
+number of cache miss
+number of memory accesses
+performance (a core free and a task waiting in another core's queue)
+talk a bit about migration.

@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+
+const	  int MAXTIME = 1000;
+typedef	  int[0,MAXTIME] time_t;      // declaration of type time
+
+const      int DRAMAccessTime=3;      // the time for reading from the memory once it is reached
+
+const      int slot=10;                // the cyclic time interval (TDMA) assigned to each core to access DRAM
+
+const	  int MAXPRI = 20;           // declaration of type priority
+typedef   int[0,MAXPRI] pri_t;
+
+const	  int tId_n = 9;                     // the number of tasks
+typedef	  int[0,tId_n-1] tId_t;
+
+const	  int cId_n = 4;                     // the number of cores
+typedef	  int[0,cId_n-1] cId_t;
+
+const    int cluster_n= 4;                 // Max Tasks Per Core
+typedef  int [0,cluster_n-1] cluster_t;
+
+const	  int actId_n = 2;                     // Max number of actions in a task
+typedef	  int[0,actId_n-1] actId_t;
+
+bool DRAMreq[cId_n]={false, false, false, false};                         // a queue to store the DRAM acess requests of cores 
+
+typedef   int[0,3] MemAccess;
+
+const     MemAccess NONE = 0;    // no memory/cache access required  
+const     MemAccess CACHE = 1;   // only cache access required
+const     MemAccess DRAM = 2;    // DRAM access required because the cache access fails
+const     MemAccess NonDeterministic = 3; // hit/miss of cache is nondeterministic
+
+typedef struct { 
+  time_t	execTime;        // exectime, number of ticks, of an atomic basic instruction
+  MemAccess   memoryAccess;  //cache/DRAM requirement and access mode
+} instruction;               // atmic instruction (statement)
+
+typedef instruction Instructions[actId_n];// a table of max ( static actid_t) instruction
+instruction coreInstr[cId_n]; //variable to store the current instruction of each core
+
+typedef struct {
+  int   length;
+  int   element[cluster_n];
+} queue_t; 
+
+const queue_t queue1={0,{-1,-1,-1,-1}};   // declaration of the core1's queue which is initially empty
+const queue_t queue2={0,{-1,-1,-1,-1}};   // declaration of the core2's queue which is initially empty
+const queue_t queue3={0,{-1,-1,-1,-1}};   // declaration of the core2's queue which is initially empty
+//const queue_t queue4={0,{0,0}};   // declaration of the core2's queue which is initially empty
+//const queue_t queue5={0,{0,0}};   // declaration of the core2's queue which is initially empty
+//const queue_t queue6={0,{0,0}};   // declaration of the core2's queue which is initially empty
+//const queue_t queue7={0,{0,0}};   // declaration of the core2's queue which is initially empty
+//const queue_t queue8={0,{0,0}};   // declaration of the core2's queue which is initially empty
+
+/* Scheduling policies */
+typedef  int[1,3] sched;
+const	 sched  FIFO  = 1;
+const	 sched  FPS   = 2;
+const    sched  EDF   = 3;
+
+typedef struct{
+  time_t     cacheTime; // cache access time
+  queue_t    queue;     // local queue to store the ready tasks assigned to the core
+  sched      scheduler; // the ID of the schedler adopted by the core
+} core_t;
+
+
+core_t core[cId_n]= {
+{2, queue1, FIFO},
+{2, queue2, FIFO},
+{2, queue3, FIFO}
+,{2, queue3, FIFO}
+//,{2, queue4, FIFO}
+//,{2, queue5, FIFO}
+//,{2, queue6, FIFO}
+//,{2, queue7, FIFO}
+//,{2, queue8, FIFO}
+};  // table of cores
+
+typedef struct { 
+  pri_t		pri;            
+  time_t	offset;
+  time_t	period;
+  time_t	deadline;  
+  bool      preemptive;
+  Instructions instr;               // the sequenec of instructions of a task
+  int numberInstrs;                 // effective number of instructions
+  cId_t   coreId;                   // the core id to which the task is assigned
+} task_t;
+
+const task_t task[tId_n]={
+{1,2,205,158,false,{{2,0},{1,2}},2,0},
+{2,3,205,160,false,{{1,1},{3,3}},2,0},
+{2,4,205,165,false,{{1,1},{2,1}},2,0},
+{2,4,205,165,false,{{1,1},{3,3}},2,0},
+{3,5,205,185,false,{{1,1},{3,3}},2,1},
+{2,6,205,195,false,{{1,2},{3,0}},2,1},
+{3,7,220,218,false,{{1,2},{2,3}},2,1},
+{3,7,220,218,false,{{1,2},{2,1}},2,1},
+{3,7,210,208,false,{{1,2},{2,3}},2,2}
+//{4,2,205,155,false,{{2,1},{3,2}},2,1},
+//{4,2,205,155,false,{{2,1},{3,2}},2,1},
+//{4,2,205,155,false,{{2,1},{3,2}},2,1},
+//{3,5,210,170,false,{{1,1},{3,3}},2,1},
+//{2,5,210,175,false,{{1,2},{3,0}},2,1},
+//{3,6,220,218,false,{{1,2},{2,3}},2,1},
+//{4,2,210,160,false,{{2,1},{3,2}},2,1},
+//{3,6,220,218,false,{{1,2},{2,2}},2,1},
+//{4,2,210,165,false,{{2,1},{3,2}},2,1}
+//{1,2,200,182,false,{{2,0},{1,2}},2,0},
+//{2,3,200,192,false,{{1,1},{3,3}},2,0},
+//{2,4,200,195,false,{{1,1},{3,3}},2,0},
+//{2,4,200,200,false,{{1,1},{3,3}},2,0},
+//{3,5,210,202,false,{{1,1},{3,3}},2,0},
+//{2,6,220,212,false,{{1,2},{3,0}},2,0},
+//{3,7,220,220,false,{{1,2},{2,3}},2,1},
+//{4,2,280,270,false,{{2,1},{3,2}},2,1},
+//{3,5,240,232,false,{{1,1},{3,3}},2,1},
+//{2,5,240,232,false,{{1,2},{3,0}},2,1}
+};
+
+clock curTime[tId_t];   // clocks to track the current local time of each task
+
+bool error=false;  // global var to store if a task misses a deadline
+          
+
+
+chan reqCore[cId_n][tId_n];  // channels to synchronize each requesting task with the scheduler of its core
+chan taskSched[cId_n][tId_n]; // channels to activate each task by its corresponding scheduler
+ chan releaseCore[cId_n]; // channels to release a core once the scheduled task is done
+ chan preempt[tId_n]; // channels to preempt tasks by the schedulers 
+ chan instrExec[cId_n]; // channels to load the current instr for each core
+ chan instrDone[cId_n]; // channels to notify the execution termination of the current instructions
+urgent  chan cacheAccess[cId_n]; // channels to request the cache access
+ chan cacheAccessDone[cId_n]; // channels to notify the termination of cache access
+ chan DRAMAccess[cId_n]; // channels to request DRAM access by cores
+ chan DRAMAccessDone[cId_n]; // channels to notify cores by the termination of DRAM access
+ //chan Connect[cId_n];  // channels to connect a core to the DRAM through the Connector
+//chan ConnectDone[cId_n];  // channels to send back the data/notification from DRAM to the connector
+
+void enqueue(cId_t c, tId_t t)
+{
+core[c].queue.element[core[c].queue.length]=t;
+core[c].queue.length++;
+}
+
+void EDF_Sched(cId_t c)
+{}
+
+void FPS_Sched(cId_t c)
+{}
+
+void sortQueue(cId_t c)    // p is the scheduling policy : 0 for FIFO, 1 for FPS, 2 for RM , 3 for EDF
+{
+if (core[c].scheduler ==EDF) { EDF_Sched(c);}
+
+if (core[c].scheduler ==FPS)  { FPS_Sched(c);}
+
+}
+
+void dequeueFirstElt(cId_t c)
+{ int i;
+if (core[c].queue.length==1)
+   {core[c].queue.length--;
+    core[c].queue.element[core[c].queue.length-1]=-1;
+   }
+else
+{
+  for(i=0; i&lt;core[c].queue.length-1; i++)
+    {
+     core[c].queue.element[i]=core[c].queue.element[i+1];   // move each element one step back
+    }
+   core[c].queue.element[core[c].queue.length-1]=-1;
+  core[c].queue.length--;
+}
+}
+</declaration>
+	<template>
+		<name x="5" y="5">Task</name>
+		<parameter>const tId_t tId</parameter>
+		<declaration>// Place local declarations here.
+
+int curInstr=0;</declaration>
+		<location id="id0" x="-238" y="187">
+			<name x="-263" y="153">InstrExec</name>
+		</location>
+		<location id="id1" x="-127" y="-42">
+			<name x="-221" y="-59">DeadlineMiss</name>
+		</location>
+		<location id="id2" x="136" y="102">
+			<name x="144" y="76">Run</name>
+			<committed/>
+		</location>
+		<location id="id3" x="-340" y="-17">
+			<name x="-417" y="-34">ExecDone</name>
+			<label kind="invariant" x="-450" y="-8">curTime[tId]&lt;=task[tId].period</label>
+		</location>
+		<location id="id4" x="136" y="-42">
+			<name x="93" y="-34">WaitSched</name>
+			<label kind="invariant" x="144" y="-68">curTime[tId]&lt;=task[tId].deadline</label>
+		</location>
+		<location id="id5" x="136" y="-161">
+			<name x="119" y="-195">Ready</name>
+			<committed/>
+		</location>
+		<location id="id6" x="-340" y="-161">
+			<name x="-350" y="-195">Init</name>
+			<label kind="invariant" x="-425" y="-153">curTime[tId] &lt;=task[tId].offset</label>
+		</location>
+		<init ref="id6"/>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="178" y="102">preempt[tId]?</label>
+			<nail x="263" y="102"/>
+			<nail x="263" y="-42"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-136" y="212">instrDone[task[tId].coreId]?</label>
+			<label kind="assignment" x="-102" y="238">curInstr++</label>
+			<nail x="-238" y="238"/>
+			<nail x="136" y="238"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-144" y="136">curInstr&lt;task[tId].numberInstrs</label>
+			<label kind="synchronisation" x="-144" y="153">instrExec[task[tId].coreId]!</label>
+			<label kind="assignment" x="-212" y="170">coreInstr[task[tId].coreId]=task[tId].instr[curInstr]</label>
+			<nail x="110" y="187"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-331" y="76">curInstr&gt;=task[tId].numberInstrs &amp;&amp; curTime[tId]&lt;=task[tId].deadline</label>
+			<label kind="synchronisation" x="-229" y="102">releaseCore[task[tId].coreId]!</label>
+			<nail x="-340" y="102"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-127" y="-17">curTime[tId]&gt;task[tId].deadline</label>
+			<label kind="synchronisation" x="-127" y="17">releaseCore[task[tId].coreId]!</label>
+			<label kind="assignment" x="-68" y="34">error=true</label>
+			<nail x="68" y="51"/>
+			<nail x="-127" y="51"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-102" y="-68">curTime[tId]&gt;=task[tId].deadline</label>
+			<label kind="assignment" x="-34" y="-42">error=true</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="136" y="8">taskSched[task[tId].coreId][tId]?</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id6"/>
+			<label kind="guard" x="-340" y="-102">curTime[tId]&gt;=task[tId].period</label>
+			<label kind="assignment" x="-340" y="-85">curTime[tId]=0, curInstr=0</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="144" y="-119">reqCore[task[tId].coreId][tId]!</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-161" y="-195">curTime[tId]&gt;=task[tId].offset</label>
+		</transition>
+	</template>
+	<template>
+		<name>Core</name>
+		<parameter>const cId_t cId</parameter>
+		<declaration>clock x;</declaration>
+		<location id="id7" x="-170" y="-85">
+		</location>
+		<location id="id8" x="-170" y="-314">
+			<name x="-195" y="-348">Determine</name>
+			<urgent/>
+		</location>
+		<location id="id9" x="-467" y="-85">
+			<name x="-535" y="-93">Execute</name>
+			<label kind="invariant" x="-544" y="-76">x&lt;=coreInstr[cId].execTime</label>
+		</location>
+		<location id="id10" x="-467" y="-314">
+			<name x="-477" y="-348">Init</name>
+		</location>
+		<init ref="id10"/>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="-374" y="-102">cacheAccessDone[cId]?</label>
+			<label kind="assignment" x="-306" y="-85">x=0</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id10"/>
+			<label kind="guard" x="-467" y="-263">x&gt;=coreInstr[cId].execTime</label>
+			<label kind="synchronisation" x="-459" y="-246">instrDone[cId]!</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id9"/>
+			<label kind="guard" x="-408" y="-204">coreInstr[cId].memoryAccess==0</label>
+			<label kind="assignment" x="-382" y="-187">x=0</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-170" y="-229">coreInstr[cId].memoryAccess&gt;0</label>
+			<label kind="synchronisation" x="-170" y="-212">cacheAccess[cId]!</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="-374" y="-340">instrExec[cId]?</label>
+		</transition>
+	</template>
+	<template>
+		<name>Cache</name>
+		<parameter>const cId_t cId</parameter>
+		<declaration>clock x;</declaration>
+		<location id="id11" x="272" y="-187">
+			<name x="280" y="-212">CacheMiss</name>
+		</location>
+		<location id="id12" x="-263" y="-34">
+			<committed/>
+		</location>
+		<location id="id13" x="272" y="-34">
+			<name x="289" y="-34">DRAMwait</name>
+		</location>
+		<location id="id14" x="0" y="-187">
+			<name x="-42" y="-221">HitMiss</name>
+			<label kind="invariant" x="-68" y="-178">x&lt;=core[cId].cacheTime</label>
+		</location>
+		<location id="id15" x="-263" y="-187">
+		</location>
+		<init ref="id15"/>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="153" y="-127">DRAMAccess[cId]!</label>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id15"/>
+			<label kind="synchronisation" x="-255" y="-127">cacheAccessDone[cId]!</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="-42" y="-59">DRAMAccessDone[cId]?</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id15"/>
+			<label kind="guard" x="-221" y="-272">x&gt;=core[cId].cacheTime &amp;&amp; 
+coreInstr[cId].memoryAccess!=2</label>
+			<label kind="synchronisation" x="-204" y="-238">cacheAccessDone[cId]!</label>
+			<nail x="0" y="-272"/>
+			<nail x="-263" y="-272"/>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id11"/>
+			<label kind="guard" x="51" y="-246">x&gt;=core[cId].cacheTime &amp;&amp;
+coreInstr[cId].memoryAccess&gt;=2</label>
+			<label kind="assignment" x="85" y="-212">DRAMreq[cId]=true</label>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="-187" y="-187">cacheAccess[cId]?</label>
+			<label kind="assignment" x="-144" y="-170">x=0</label>
+		</transition>
+	</template>
+	<template>
+		<name>Connector</name>
+		<declaration>clock x, y;
+cId_t turn=0;</declaration>
+		<location id="id16" x="-136" y="-195">
+			<name x="-119" y="-195">Wait</name>
+			<label kind="invariant" x="-170" y="-238">x&lt;= slot-DRAMAccessTime</label>
+		</location>
+		<location id="id17" x="-348" y="-195">
+			<name x="-408" y="-221">SlotExpiry</name>
+			<label kind="invariant" x="-408" y="-204">x&lt;=slot</label>
+		</location>
+		<location id="id18" x="51" y="-76">
+			<name x="76" y="-85">Connecting</name>
+			<label kind="invariant" x="68" y="-68">y&lt;= DRAMAccessTime</label>
+		</location>
+		<location id="id19" x="-136" y="-76">
+			<name x="-144" y="-59">Assign</name>
+			<committed/>
+		</location>
+		<location id="id20" x="-348" y="-76">
+			<committed/>
+		</location>
+		<init ref="id20"/>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id17"/>
+			<label kind="guard" x="-263" y="-25">y&gt;=DRAMAccessTime &amp;&amp; 
+x&gt; slot-DRAMAccessTime</label>
+			<label kind="synchronisation" x="-255" y="8">DRAMAccessDone[turn]!</label>
+			<nail x="51" y="0"/>
+			<nail x="-416" y="0"/>
+			<nail x="-416" y="-170"/>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id17"/>
+			<label kind="guard" x="-323" y="-212">x&gt;=slot-DRAMAccessTime</label>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id19"/>
+			<label kind="guard" x="-127" y="-153">DRAMreq[turn]==true</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id20"/>
+			<label kind="guard" x="-340" y="-178">x&gt;=slot</label>
+			<label kind="assignment" x="-340" y="-161">turn=(turn+1)%cId_n,
+x=0</label>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id16"/>
+			<label kind="guard" x="-306" y="-119">DRAMreq[turn]==false</label>
+			<nail x="-331" y="-102"/>
+			<nail x="-161" y="-102"/>
+			<nail x="-161" y="-170"/>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id16"/>
+			<label kind="guard" x="59" y="-161">y&gt;=DRAMAccessTime &amp;&amp; 
+x&lt;= slot-DRAMAccessTime</label>
+			<label kind="synchronisation" x="59" y="-178">DRAMAccessDone[turn]!</label>
+			<nail x="51" y="-195"/>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id18"/>
+			<label kind="synchronisation" x="-110" y="-110">DRAMAccess[turn]?</label>
+			<label kind="assignment" x="-127" y="-93">DRAMreq[turn]=false, y=0</label>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id19"/>
+			<label kind="guard" x="-306" y="-76">DRAMreq[turn]==true</label>
+			<nail x="-331" y="-51"/>
+			<nail x="-161" y="-51"/>
+		</transition>
+	</template>
+	<template>
+		<name>Scheduler</name>
+		<parameter>const cId_t cId</parameter>
+		<location id="id21" x="-722" y="-42">
+			<committed/>
+		</location>
+		<location id="id22" x="-722" y="-119">
+			<committed/>
+		</location>
+		<location id="id23" x="-331" y="-119">
+			<committed/>
+		</location>
+		<location id="id24" x="-544" y="-119">
+		</location>
+		<init ref="id24"/>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id24"/>
+			<label kind="synchronisation" x="-705" y="-42">taskSched[cId][core[cId].queue.element[0]]!</label>
+			<nail x="-544" y="-42"/>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id21"/>
+			<label kind="guard" x="-722" y="-102">core[cId].queue.length&gt;0</label>
+			<label kind="assignment" x="-722" y="-93">sortQueue(cId)</label>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id24"/>
+			<label kind="guard" x="-714" y="-144">core[cId].queue.length==0</label>
+		</transition>
+		<transition>
+			<source ref="id24"/>
+			<target ref="id22"/>
+			<label kind="synchronisation" x="-688" y="-212">releaseCore[cId]?</label>
+			<label kind="assignment" x="-688" y="-195">dequeueFirstElt(cId)</label>
+			<nail x="-569" y="-178"/>
+			<nail x="-688" y="-178"/>
+		</transition>
+		<transition>
+			<source ref="id23"/>
+			<target ref="id24"/>
+			<label kind="guard" x="-518" y="-229">core[cId].queue.length==1</label>
+			<label kind="synchronisation" x="-552" y="-212">taskSched[cId][core[cId].queue.element[0]]!</label>
+			<nail x="-331" y="-187"/>
+			<nail x="-544" y="-187"/>
+		</transition>
+		<transition>
+			<source ref="id24"/>
+			<target ref="id23"/>
+			<label kind="select" x="-476" y="-161">i:tId_t</label>
+			<label kind="synchronisation" x="-484" y="-144">reqCore[cId][i]?</label>
+			<label kind="assignment" x="-484" y="-119">enqueue(cId,i)</label>
+		</transition>
+		<transition>
+			<source ref="id23"/>
+			<target ref="id24"/>
+			<label kind="guard" x="-510" y="-85">core[cId].queue.length&gt;1</label>
+			<nail x="-357" y="-59"/>
+			<nail x="-510" y="-59"/>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+Task0 = Task(0); Task1 = Task(1); Task2 = Task(2); Task3 = Task(3);
+Task4 = Task(4);
+Task5 = Task(5);
+Task6 = Task(6);
+Task7 = Task(7);
+Task8 = Task(8);
+//Task9 = Task(9);
+//Task10 = Task(10);
+//Task11 = Task(11);
+//Task12 = Task(12); Task13 = Task(13);
+//Task14 = Task(14); Task15 = Task(15);
+//Task16 = Task(16); Task17 = Task(17);
+Core1 = Core(0); Cache1 = Cache(0); Sched1 = Scheduler(0);
+Core2 = Core(1); Cache2 = Cache(1); Sched2 = Scheduler(1); 
+//Core3 = Core(2); //Cache3 = Cache(2); Sched3 = Scheduler(2);
+//Core4 = Core(3); Cache4 = Cache(3); Sched4 = Scheduler(3);
+//Core5 = Core(4); Cache5 = Cache(4); Sched5 = Scheduler(4);
+//Core6 = Core(5); Cache6 = Cache(5); Sched6 = Scheduler(5);
+//Core7 = Core(6); Cache7 = Cache(6); Sched7 = Scheduler(6);
+//Core8 = Core(7); Cache8 = Cache(7); Sched8 = Scheduler(7);
+
+
+//MainMem = DRAM_Memory();
+connector = Connector();
+
+
+// List one or more processes to be composed into a system.
+system //Task,Core, Cache, Scheduler, 
+
+Task0, Task1, Task2, Task3,Task4,Task5 ,
+Task6,Task7,
+//Task8, //Task9, Task10, Task11,
+//Task12, Task13,Task14, Task15,Task16, Task17,
+Core1, Core2,// Core3,// Core4, //Core5, //Core6,Core7, Core8,
+Cache1, Cache2,// Cache3,// Cache4,//Cache5,// Cache6,Cache7, Cache8,
+ Sched1, Sched2, //Sched3, //Sched4,//Sched5,// Sched6,Sched7, Sched8,
+// MainMem,
+connector ; 
+    </system>
+	<queries>
+		<query>
+			<formula>A[] not deadlock
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>simulate 100 [&lt;=100] {wcrt[1], wcet[1]}
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>simulate 100 [&lt;=30000]{ supplying_time[0], exeTime[1],  exeTime[2]}: 1: error==1
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>simulate 1 [&lt;=3000]{ supplying[0], sPrdIndc[0] , 3+running[1], 3+tPrdIndc[1] , 5.5+running[2], 5.5+tPrdIndc[2] }
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E[gClock&lt;=simTime;100](max:cbudget[0] )
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>A[] !error
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; error
+			</formula>
+			<comment>
+			</comment>
+		</query>
+	</queries>
+</nta>

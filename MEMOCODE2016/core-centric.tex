@@ -1,0 +1,5 @@
+To leverage the processing performance of a computing system, a processing unit (core in our context) can be assigned more than one task, however only one task can execute effectively at any point in time. The arbitration between the different tasks execution is performed according to a scheduling policy. 
+
+Basically, a scheduling policy determines, at any point in time, which task from the ready queue must execute first and whether a given task should be preempted by another. Such a ready queue can be either local for a given core (Local scheduling) or common for a set of cores (Global Scheduling). The most commonly used scheduling algorithms are {Earliest Deadline First} (EDF), {Fixed Priority Scheduling} (FPS) and {Rate Monotonic} (RM). The key factor in selecting a task from the ready queue can be assigned to the priority, remaining execution time, etc. 
+ 
+In our setting, we adopt FIFO, FPS and EDF as scheduling policies for the individual cores.  %Classic static (cyclic) scheduling used in aerospace contexts can also be coded as a policy if needed. 

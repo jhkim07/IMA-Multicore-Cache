@@ -1,0 +1,9 @@
+We are using \uppaalsmc \cite{SMC} to perform a formalized statistical simulation of our models, known as Statistical Model Checking (SMC). SMC enables quantitative performance measurements instead of the Boolean (true, false) evaluation that symbolic model checking techniques provide.    
+We can summarize the main features of \uppaalsmc in the following:
+\begin{itemize}
+\item Stopwatches \cite{DBLP:conf/concur/CassezL00} are clocks that can be stopped and resumed without a reset. They are very practical to measure the execution time of preemptive tasks.
+\item Simulation and estimation of the expected minimum or maximum value of expressions over a set of runs, \texttt{E[bound](min:expr)} and \texttt{E[bound](max:expr)}, for a given simulation time and/or number of runs specified by \texttt{bound}. 
+\item Probability evaluation \texttt{Pr[bound] (P)} for a property \texttt{P} to be satisfied within a given simulation time and/or number of runs specified by \texttt{bound}. \texttt{P} is specified using either LTL or tMITL logic. 
+\end{itemize}
+
+Statistical model checking does not provide complete certainty that a property is satisfied, but only verifies it up to a specific confidence level \cite{DBLP:conf/formats/DavidLLMPVW11}, given as an analysis parameter.
