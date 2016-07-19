@@ -1,10 +1,15 @@
 \label{sec:relatedwork}
+Performance represents a key factor in comparing and identifying multicore platforms which are more adequate for given users and applications. The selection of performance metrics depends on the resources and services a system runs as performance usually resources utilization and system outputs. The most common performance analysis techniques for multicore systems are analytical modeling \cite{Heechul2015,Kim14}; and simulation and measurement \cite{***,DBLP:journals/corr/TeodoroKAKFS15,10.1109/MS.2005.102}. 
 
-\cite{10.1109/MS.2005.102} performance analysis techniques 
+\cite{10.1109/MS.2005.102} presents a survey on performance analysis techniques for COTS-based systems and discusses the trade-off between the design models used to capture systems to be analyzed and the performance attributes to be measured. Delays and throughput have been identified as main metrics among other performance attributes such as resource contention. In a similar way, \cite{Rakhee2014} presents a set of performance metrics (throughput, energy consumption, memory contention, \textit{etc}) and criteria (time, cost, accuracy, \textit{etc}) to compare a set of multicore platforms and architectures. A conclusion driven by the author is that performance metrics need to be chosen based on the purpose and efficiency of the analysis while taking advantage of the multicore platform architectures. 
 
-\cite{Rakhee2014} performance measurement of multicore systems
+The authors of \cite{Heechul2015,Kim14} introduce analytical frameworks to calculate memory interference delays in multicore systems. The interference of the request under analysis is calculated based on inter and intra-bank interference as well as \textit{row-opening} (loading data from a row to a row-buffer) and \textit{precharge} (moving data back from a row-buffer to a row). Each of these elements is calculated separately. Since each request is analyzed separately, a relevant question is how these analytical frameworks deal with memory-intensive systems where each process performs thousands of memory requests.
 
-\cite{DBLP:journals/corr/TeodoroKAKFS15} performance analysis of multicore systems
+
+The authors of \cite{DBLP:journals/corr/TeodoroKAKFS15} perform an experimental comparison of different multicore architectures in terms of performance, and propose new scheduling strategies to improve the performance of multicore systems. The platforms considered consist each of a set of heterogeneous types of cores having different frequencies. The execution model is implemented in terms of code annotation using OpenMP. Two scheduling strategies have been discussed: Performance-Aware Dequeue Adapted Scheduler (PADAS) and Performance-Aware Multiqueue Scheduler (PAMS). In PADAS, tasks are sorted out in one ready queue (global) based on the acceleration (speedup) expected by each task, where tasks having higher acceleration have priority over others. In this context, acceleration comes from the use of co-processors. A task is assigned to a core based on whether the core frequency satisfies the task acceleration or not. In PAMS, local scheduling is adopted for each core type so that tasks having certain range of acceleration are sorted in the appropriate queue according to a descending order of the acceleration. This framework relies on an efficient task-to-core mapping to achieve better performance. Tasks response time is the performance metric used to compare systems when using different scheduling policies: PADAS, PAMS, Heterogeneous Earliest Finish Time (HEFT) and First Come First Served (FCFS).  
+%
+%However, having static frequency for cores can lead to cores available while tasks having non compatible acceleration are waiting to be scheduled, which is could be a non efficient use of the platform. 
+Our work alines with \cite{DBLP:journals/corr/TeodoroKAKFS15}, to certain extent, however it differs by using system benchmarks rather than codes. Moreover, by adopting the AMP scheduling strategy we assume that identifying the optimal task-to-core mapping is beyond the scope of this paper.
 
 \cite{5762713} evaluation and optimization of the performance
 
@@ -12,13 +17,8 @@
 
 \cite{SHARMA2014544} The tool also provides the possibility of implementing different scheduling and mapping algorithms for multi-core process systems and evaluating the performance when changing various design parameters.
 
-
 %Analyzing the schedulability of an application while considering an abstraction of the execution platform leads necessarily to underestimate the system requirements (workload) in terms of resources. This may cause serious deficits when deploying the system on a concrete platform. 
 
 The analysis of multicore real-time systems has attracted a lot of attention recently. 
-
-In this work, we combine the analysis processes so that for a given platform we check whether the application tasks will be schedulable or not, given the task WCETs estimated in isolation. Our framework provides also the ability to calculate the isWCET and a method for reallocation of tasks to cores upon non-schedulability. 
- %In case a system is not schedulable, given the actual interference we analyze the cores utilization and recommend a change in tasks allocation among cores so that a new configuration could be schedulabe. 
-The novelty of our modeling approach is the inclusion of cache coloring policy \cite{Hyoseung13} to arbitrate concurrent access requests to the shared cache, FR-FCFS policy \cite{Rixner2000,Nesbit2006,Kim14} commonly used by modern memory controllers to schedule the DRAM accesses, while distinguishing between read and write requests. 
 
 %Given a multicore execution platform, including processing units, local caches and a shared memory, we formally analyze the system schedulability. Moreover, our framework can easily be used to estimate the concrete execution time, including cache access and blobking/access time to the shared memory, of the application tasks.    
